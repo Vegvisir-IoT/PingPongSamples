@@ -9,7 +9,7 @@ $ ./gradlew build
 $ ./gradlew run
 ```
 ### Generate Python Protobuf files
-Add python { } under task.builtins. If you don't want python files, just comment it out.
+Add python { } under task.builtins at [here](https://github.com/Vegvisir-IoT/PingPongSamples/blob/master/java/app/build.gradle). If you don't want python files, just comment it out.
 ```kotlin
 generateProtoTasks {
     all().each { task ->
