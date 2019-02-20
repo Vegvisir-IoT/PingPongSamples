@@ -23,4 +23,7 @@ generateProtoTasks {
     }
 }
 ```
+### Versions
+- java @ 11.0.1
+- protobuf/protbuf-lite @ 3.0.0
 
