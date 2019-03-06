@@ -1,9 +1,8 @@
-
 package com.example.sample;
 
-
-import com.example.sample.proto.*;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.DataOutputStream;
@@ -12,11 +11,9 @@ import java.net.Socket;
 import java.util.concurrent.Executors;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import com.example.sample.proto.SearchRequest;
 
-
-
-
-public class TierServer {
+public class ProtoServer {
     /**
      * Server will listen on 9191
      */
@@ -25,7 +22,7 @@ public class TierServer {
         InetAddress ip;
         String hostname;
         try {
-			ip = InetAddress.getLocalHost();
+            ip = InetAddress.getLocalHost();
             hostname = ip.getHostName();
             System.out.println("Current IP address : " + ip);
             System.out.println("Current Hostname : " + hostname);
@@ -55,33 +52,30 @@ public class TierServer {
         }
 
         public void run() {
-            String message = "";
+            byte[] message;
             try {
-                var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                String line;
+                //var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                //InputStream in = socket.getInputStream();
+                //ByteArrayOutputStream line = new ByteArrayOutputStream();
                 String banner = "Server Response.";
-                /*com.example.sample.Srequest.SearchRequest request = 
-                    com.example.sample.Srequest.SearchRequest.newBuilder()
-                    .setQuery("Where is my help at?")
-                    .setPagNumber( 88 )
-                    .setResultPerPage( 2 );*/
                 byte [] outgoing = banner.getBytes();
+                SearchRequest request = SearchRequest.parseFrom( socket.getInputStream() );
+
                 DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
-                //dOut.writeInt( outgoing.length);
                 dOut.write( outgoing );
-                while ( (line = in.readLine()) != null)
-                {
-                    message += line;
-                }
+                System.out.println("Received the following message:");
+                System.out.println("Query: " + request.getQuery());
+                System.out.println("Results: " + request.getResultPerPage());
+                System.out.println("Connection with client #" + clientNumber + " closed");
 
                 //out.flush();
             } catch (Exception e){
                 System.out.println("Error handling client #" + clientNumber);
             } finally {
                 try { socket.close(); } catch (IOException e) {System.out.println("unable to close initially");}
-                System.out.println( "Received: "+ message );
-                System.out.println("Connection with client #" + clientNumber + " closed");
+                //System.out.println( "Received: "+ message );
             }
         }
     }
 }
+
