@@ -13,7 +13,7 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import com.example.sample.proto.SearchRequest;
 
-public class ProtoServer {
+public class TierServer {
     /**
      * Server will listen on 9191
      */
