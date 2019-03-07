@@ -28,5 +28,5 @@ with socket.socket() as s:
     s.settimeout(5.0)
     data = s.recv(size)
     my_message = sp.SearchRequest()
-    my_message.ParseFromString( s.recv(size) )
+    my_message.ParseFromString( data )
     print( my_message.__str__() )
