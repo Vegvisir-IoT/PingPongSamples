@@ -8,9 +8,8 @@ import sample_pb2 as sp
 # when we receive we get this hanging on the python side
 # python recv causes error
 
-HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 9191        # The port used by the server
-# HOST = input("Address of server\n")
+HOST = input("Address of server\n")
 temp = sp.SearchRequest()
 temp.query = "Hello World"
 temp.page_number = 232
@@ -21,11 +20,13 @@ print( temp.__str__() )
 
 with socket.socket() as s:
     s.connect((HOST, PORT))
-    s.sendall( temp.SerializeToString() )
+    s.send( temp.SerializeToString() )
     print( temp.SerializeToString())
     #address_book.SerializeToString()
     size = 4096
     data = b''
     s.settimeout(5.0)
     data = s.recv(size)
-print( data )
+    my_message = sp.SearchRequest()
+    my_message.ParseFromString( s.recv(size) )
+    print( my_message.__str__() )

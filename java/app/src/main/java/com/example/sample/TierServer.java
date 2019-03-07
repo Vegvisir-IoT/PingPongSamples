@@ -52,17 +52,24 @@ public class TierServer {
         }
 
         public void run() {
+            System.out.println("Run Started...");
             byte[] message;
             try {
-                //var in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                //InputStream in = socket.getInputStream();
-                //ByteArrayOutputStream line = new ByteArrayOutputStream();
-                String banner = "Server Response.";
-                byte [] outgoing = banner.getBytes();
-                SearchRequest request = SearchRequest.parseFrom( socket.getInputStream() );
-
+                SearchRequest.Builder out_request = SearchRequest.newBuilder()
+                    .setQuery("Server Responding")
+                    .setPageNumber(12)
+                    .setResultPerPage(369);
+                    //.build();
+                //String banner = "Server Response.";
+                byte [] outgoing = out_request.build().toByteArray();
+                //final byte[] outgoing = out_request.toByteArray();
                 DataOutputStream dOut = new DataOutputStream(socket.getOutputStream());
                 dOut.write( outgoing );
+                //out_request.build().writeTo(dOut);
+                dOut.flush();
+                System.out.println("Message sent?");
+                SearchRequest request = SearchRequest.parseFrom( socket.getInputStream() );
+
                 System.out.println("Received the following message:");
                 System.out.println("Query: " + request.getQuery());
                 System.out.println("Results: " + request.getResultPerPage());
